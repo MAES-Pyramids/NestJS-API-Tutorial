@@ -6,13 +6,12 @@ import { AuthDto } from './dto';
 export class AuthController {
    constructor(private authService: AuthService) {}
    @Post('Login')
-   login(@Body() dto: AuthDto) {
-      console.log({ dto });
-      return this.authService.login();
+   signup(@Body() dto: AuthDto) {
+      return this.authService.signup(dto);
    }
 
    @Post('Signup')
-   signup(req, res) {
-      return this.authService.signup();
+   login(req, res) {
+      return this.authService.login();
    }
 }
