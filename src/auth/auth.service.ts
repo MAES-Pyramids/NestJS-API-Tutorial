@@ -7,6 +7,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 @Injectable()
 export class AuthService {
    constructor(private prisma: PrismaService) {}
+
    async login(dto: AuthDto) {
       // Find user by email address
       const user = await this.prisma.user.findUnique({
@@ -19,7 +20,8 @@ export class AuthService {
       const passMatch = await argon.verify(user.hashedPass, dto.password);
       if (!passMatch) throw new ForbiddenException('Password mismatch');
 
-      return { Message: 'you are logged in' };
+      delete user.hashedPass;
+      return user;
    }
 
    async signup(dto: AuthDto) {
