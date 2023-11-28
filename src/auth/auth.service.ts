@@ -20,6 +20,10 @@ export class AuthService {
             email: dto.email,
             hashedPass,
          },
+         select: {
+            first_name: true,
+            email: true,
+         },
       });
       // return the user
       return user;
