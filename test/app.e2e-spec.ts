@@ -23,6 +23,4 @@ describe('AppController (e2e)', () => {
    afterAll(() => {
       app.close();
    });
-
-   it.todo('it should pass');
 });
