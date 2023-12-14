@@ -118,5 +118,7 @@ describe('AppController (e2e)', () => {
                .expectStatus(200);
          });
       });
+
+      describe('Edit user', () => {});
    });
 });

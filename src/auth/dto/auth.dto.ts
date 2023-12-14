@@ -20,8 +20,8 @@ export class AuthDto {
    @IsNotEmpty()
    password: string;
 
-   @IsEnum(['male', 'female'], {
+   @IsEnum(['MALE', 'FEMALE', 'OTHER'], {
       message: 'sorry, u are only allowed to be male or female',
    })
-   gender: 'male' | 'female';
+   gender: 'MALE' | 'FEMALE' | 'OTHER';
 }

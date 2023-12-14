@@ -17,6 +17,8 @@ model User {
   email        String @unique
   hashedPass   String   
 
+  gender      Gender?     
+
   bookmarks Bookmark[]
   @@map("users")
 }
@@ -34,4 +36,10 @@ model Bookmark {
   user User @relation(fields: [userId],references: [id])
 
   @@map("bookmakrs")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
 }
