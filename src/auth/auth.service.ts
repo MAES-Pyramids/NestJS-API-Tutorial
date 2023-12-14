@@ -37,6 +37,7 @@ export class AuthService {
          const user = await this.prisma.user.create({
             data: {
                first_name: dto.first_name,
+               gender: dto.gender,
                email: dto.email,
                hashedPass,
             },
