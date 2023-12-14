@@ -1,8 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
+import * as pactum from 'pactum';
 import { AppModule } from './../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
+import { AuthDto } from '../src/auth/dto';
 
 describe('AppController (e2e)', () => {
    let app: INestApplication;
@@ -20,13 +22,55 @@ describe('AppController (e2e)', () => {
          }),
       );
       await app.init();
+      await app.listen(3333);
+
       prisma = app.get(PrismaService);
       await prisma.cleanDb();
+
+      pactum.request.setBaseUrl('http://localhost:3333');
    });
 
    afterAll(() => {
       app.close();
    });
 
-   it.todo('should pass validation');
+   describe('Auth', () => {
+      const dto: AuthDto = {
+         first_name: 'MAES',
+         email: 'vdfvvdvsdf@me.com',
+         password: 'sdM2dssd1111$s121',
+         gender: 'male',
+      };
+
+      describe('Signup', () => {
+         it('should throw if email empty', () => {
+            return pactum
+               .spec()
+               .post('/auth/signup')
+               .withBody({
+                  password: dto.password,
+               })
+               .expectStatus(400);
+         });
+         it('should throw if password empty', () => {
+            return pactum
+               .spec()
+               .post('/auth/signup')
+               .withBody({
+                  email: dto.email,
+               })
+               .expectStatus(400);
+         });
+         it('should throw if no body provided', () => {
+            return pactum.spec().post('/auth/signup').expectStatus(400);
+         });
+         it('should signup', () => {
+            return pactum
+               .spec()
+               .post('/auth/signup')
+               .withBody(dto)
+               .expectStatus(201);
+         });
+      });
+   });
 });
