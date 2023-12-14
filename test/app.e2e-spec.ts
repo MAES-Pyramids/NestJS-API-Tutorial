@@ -39,7 +39,7 @@ describe('AppController (e2e)', () => {
          first_name: 'MAES',
          email: 'vdfvvdvsdf@me.com',
          password: 'sdM2dssd1111$s121',
-         gender: 'male',
+         gender: 'MALE',
       };
 
       describe('Signup', () => {

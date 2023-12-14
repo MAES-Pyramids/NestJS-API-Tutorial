@@ -13,7 +13,7 @@ export class UserService {
             ...dto,
          },
       });
-
+      delete user.hashedPass;
       return user;
    }
 }
