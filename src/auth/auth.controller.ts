@@ -5,6 +5,7 @@ import { AuthDto } from './dto';
 @Controller('auth')
 export class AuthController {
    constructor(private authService: AuthService) {}
+
    @HttpCode(201)
    @Post('Signup')
    async signup(@Body() dto: AuthDto) {
