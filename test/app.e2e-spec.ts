@@ -105,4 +105,18 @@ describe('AppController (e2e)', () => {
          });
       });
    });
+
+   describe('User', () => {
+      describe('Get me', () => {
+         it('should get current user', () => {
+            return pactum
+               .spec()
+               .get('/user/me')
+               .withHeaders({
+                  Authorization: 'Bearer $S{userAt}',
+               })
+               .expectStatus(200);
+         });
+      });
+   });
 });
