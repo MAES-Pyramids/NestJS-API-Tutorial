@@ -14,7 +14,7 @@ import { EditUserDto } from './dto';
 import { MorganInterceptor } from 'nest-morgan';
 
 @UseGuards(JwtGuard)
-@Controller('user')
+@Controller('users')
 export class UserController {
    constructor(private userService: UserService) {}
 
