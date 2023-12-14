@@ -9,6 +9,7 @@ export class EditUserDto {
    @IsOptional()
    email?: string;
 
+   @IsOptional()
    @IsEnum(['MALE', 'FEMALE', 'OTHER'], {
       message: 'sorry, u are only allowed to be male or female',
    })

@@ -5,6 +5,7 @@ import * as pactum from 'pactum';
 import { AppModule } from './../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { AuthDto } from '../src/auth/dto';
+import { EditUserDto } from '../src/user/dto';
 
 describe('AppController (e2e)', () => {
    let app: INestApplication;
@@ -35,7 +36,7 @@ describe('AppController (e2e)', () => {
    });
 
    describe('Auth', () => {
-      const dto: AuthDto = {
+      const AuthDto: AuthDto = {
          first_name: 'MAES',
          email: 'vdfvvdvsdf@me.com',
          password: 'sdM2dssd1111$s121',
@@ -48,7 +49,7 @@ describe('AppController (e2e)', () => {
                .spec()
                .post('/auth/signup')
                .withBody({
-                  password: dto.password,
+                  password: AuthDto.password,
                })
                .expectStatus(400);
          });
@@ -57,7 +58,7 @@ describe('AppController (e2e)', () => {
                .spec()
                .post('/auth/signup')
                .withBody({
-                  email: dto.email,
+                  email: AuthDto.email,
                })
                .expectStatus(400);
          });
@@ -68,18 +69,18 @@ describe('AppController (e2e)', () => {
             return pactum
                .spec()
                .post('/auth/signup')
-               .withBody(dto)
+               .withBody(AuthDto)
                .expectStatus(201);
          });
       });
 
-      describe('Signin', () => {
+      describe('Signing', () => {
          it('should throw if email empty', () => {
             return pactum
                .spec()
                .post('/auth/login')
                .withBody({
-                  password: dto.password,
+                  password: AuthDto.password,
                })
                .expectStatus(400);
          });
@@ -88,18 +89,18 @@ describe('AppController (e2e)', () => {
                .spec()
                .post('/auth/login')
                .withBody({
-                  email: dto.email,
+                  email: AuthDto.email,
                })
                .expectStatus(400);
          });
          it('should throw if no body provided', () => {
             return pactum.spec().post('/auth/login').expectStatus(400);
          });
-         it('should signin', () => {
+         it('should Login', () => {
             return pactum
                .spec()
                .post('/auth/login')
-               .withBody(dto)
+               .withBody(AuthDto)
                .expectStatus(200)
                .stores('userAt', 'access_token');
          });
@@ -107,18 +108,35 @@ describe('AppController (e2e)', () => {
    });
 
    describe('User', () => {
+      const AuthHeader = {
+         Authorization: 'Bearer $S{userAt}',
+      };
+
+      const EditDto: EditUserDto = {
+         first_name: 'Edited User',
+         gender: 'OTHER',
+      };
+
       describe('Get me', () => {
          it('should get current user', () => {
             return pactum
                .spec()
                .get('/user/me')
-               .withHeaders({
-                  Authorization: 'Bearer $S{userAt}',
-               })
+               .withHeaders(AuthHeader)
                .expectStatus(200);
          });
       });
 
-      describe('Edit user', () => {});
+      describe('Edit user', () => {
+         it('should edit current user', () => {
+            return pactum
+               .spec()
+               .patch('/user/me')
+               .withHeaders(AuthHeader)
+               .withBody(EditDto)
+               .expectStatus(200)
+               .expectBodyContains(EditDto.gender);
+         });
+      });
    });
 });
